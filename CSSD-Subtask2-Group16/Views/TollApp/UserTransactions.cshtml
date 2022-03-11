@@ -1,0 +1,123 @@
+﻿@using System.ComponentModel.DataAnnotations;
+@using CSSD_Subtask2_Group16.Models;
+@model User
+@{
+    void onCheck(Transaction t)
+    {
+        t.Flagged = !t.Flagged;
+    }
+
+    ViewBag.Title = "User Transactions";
+    TollAppContext db = new TollAppContext();
+    List<Transaction> userTransactions = new List<Transaction>();
+    string name = "Welcome ";
+    if (Model != null)
+    {
+        userTransactions = db.Transactions.Where(item => item.Journey.UserId == Model.UserId).ToList();
+        name += Model.FirstName + " " + Model.LastName;
+    }
+}
+
+<head>
+    <!--Add StyleSheet-->
+</head>
+<body>
+    <!--Add Toll App Icon-->
+    <div class="topbar">
+        <h2>@name</h2>
+        <!--Add Settings Icon-->
+    </div>
+    <div>
+        <table>
+            <tr>
+                <th>Transaction ID</th>
+                <th>Plate Number</th>
+                <th>Date</th>
+                <th>Cost</th>
+                <th>Settled</th>
+                <th>Flagged</th>
+            </tr>
+            @foreach(Transaction t in userTransactions)
+            {
+        <tr>
+            <td>@t.TransactionId</td>
+            <td>@t.Journey.PlateNo</td>
+            <td>@t.Journey.Date.Date</td>
+            <td>@t.Cost</td>
+            <td>
+                @if (!t.Settled)
+                {
+                    if (Model.Bank.PaymentType == 0)
+                    {
+                        <span>Bill Mailed</span>
+                    }
+                    else
+                    {
+                        <a href="#" data-toggle="modal" data-target=@("#S" + t.TransactionId.ToString())>
+                            <div>Pay Now</div>
+                        </a>
+                        <div class="modal fade" id=@("S" + t.TransactionId.ToString()) tabindex="-1" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <div class="stopId">
+                                        </div>
+                                        <h4>
+                                            Payment
+                                        </h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <label for="accountnum">Account Number:</label>
+                                        <input type="text" id="accountnum" name="accountnum"><br><br>
+                                        <label for="accountnum">Sort Code:</label>
+                                        <input type="text" id="sortcode" name="sortcode"><br><br>
+                                        <input type="button" value="Pay">
+                                    </div>
+                                    <div class="modal-footer" style="text-align:left">
+                                        <h5 style="display:block;">
+                                            Detected Bank with Account Number: @(Model.Bank.AccountNumber)
+                                            <label for="preexistingpay">Click to Pay with these Details:</label>
+                                            <input type="button" id="preexistingpay" value="Pay" onclick="pay(@(t.TransactionId)))">
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <span>@t.PaymentDates.Single().PaymentDate1.Date.ToString()</span>
+                }
+            </td>
+            <td>
+                @if(t.Flagged)
+                {
+                    <input type="checkbox" value="flagged" onclick="check(@(t.TransactionId))" checked>
+                }
+                else 
+                { 
+                    <input type="checkbox" value="flagged" onclick="check(@(t.TransactionId))">
+                }
+            </td>
+        </tr>
+            }
+        </table>
+        <!--TABLE DISPLAYING TRANSACTIONS-->
+    </div>
+</body>
+
+
+<script>
+    function check(id) {
+        $.get("/TollApp/Check", { id: id }, function () {
+
+        })
+    }
+    function pay(id) {
+        $.get("/TollApp/Settle", { id: id }, function () {
+
+        })
+    }
+</script>
