@@ -17,23 +17,18 @@ namespace CSSD_Subtask2_Group16.Models
         public int UserId { get; set; }
 
         [Required]
-        [StringLength(30)]
         public string Email { get; set; }
 
         [Required]
-        [StringLength(30)]
         public string Password { get; set; }
 
         [Required]
-        [StringLength(15)]
         public string FirstName { get; set; }
 
         [Required]
-        [StringLength(15)]
         public string LastName { get; set; }
 
         [Required]
-        [StringLength(50)]
         public string HomeAddress { get; set; }
 
         public int BankId { get; set; }

@@ -24,11 +24,15 @@ namespace CSSD_Subtask2_Group16.Models
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int JourneyId { get; set; }
 
+        public int BankId { get; set; }
+
         public double Cost { get; set; }
 
         public bool Settled { get; set; }
 
         public bool Flagged { get; set; }
+
+        public virtual Bank Bank { get; set; }
 
         public virtual Journey Journey { get; set; }
 

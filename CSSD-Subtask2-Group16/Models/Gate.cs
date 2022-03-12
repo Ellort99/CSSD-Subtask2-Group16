@@ -19,7 +19,6 @@ namespace CSSD_Subtask2_Group16.Models
         public int GateId { get; set; }
 
         [Required]
-        [StringLength(50)]
         public string Location { get; set; }
 
         public int GateType { get; set; }

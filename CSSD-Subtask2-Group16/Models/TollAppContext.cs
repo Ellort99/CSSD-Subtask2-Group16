@@ -26,18 +26,23 @@ namespace CSSD_Subtask2_Group16.Models
         {
             modelBuilder.Entity<Admin>()
                 .Property(e => e.Email)
-                .IsFixedLength();
+                .IsUnicode(false);
 
             modelBuilder.Entity<Admin>()
                 .Property(e => e.Password)
-                .IsFixedLength();
+                .IsUnicode(false);
 
             modelBuilder.Entity<Admin>()
                 .Property(e => e.Motorway)
-                .IsFixedLength();
+                .IsUnicode(false);
 
             modelBuilder.Entity<Bank>()
                 .HasMany(e => e.PaymentDates)
+                .WithRequired(e => e.Bank)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Bank>()
+                .HasMany(e => e.Transactions)
                 .WithRequired(e => e.Bank)
                 .WillCascadeOnDelete(false);
 
@@ -48,7 +53,7 @@ namespace CSSD_Subtask2_Group16.Models
 
             modelBuilder.Entity<Gate>()
                 .Property(e => e.Location)
-                .IsFixedLength();
+                .IsUnicode(false);
 
             modelBuilder.Entity<Gate>()
                 .HasMany(e => e.Journeys)
@@ -89,23 +94,23 @@ namespace CSSD_Subtask2_Group16.Models
 
             modelBuilder.Entity<User>()
                 .Property(e => e.Email)
-                .IsFixedLength();
+                .IsUnicode(false);
 
             modelBuilder.Entity<User>()
                 .Property(e => e.Password)
-                .IsFixedLength();
+                .IsUnicode(false);
 
             modelBuilder.Entity<User>()
                 .Property(e => e.FirstName)
-                .IsFixedLength();
+                .IsUnicode(false);
 
             modelBuilder.Entity<User>()
                 .Property(e => e.LastName)
-                .IsFixedLength();
+                .IsUnicode(false);
 
             modelBuilder.Entity<User>()
                 .Property(e => e.HomeAddress)
-                .IsFixedLength();
+                .IsUnicode(false);
 
             modelBuilder.Entity<User>()
                 .HasOptional(e => e.Preference)
